@@ -14,12 +14,12 @@
  */
 class BeaverLister {
 	/**
-     * All post types where beaver builder is enabled.
-     *
-     * @author    WP Beaver World
-     * @var       array
-     * @access    private
-     */
+	 * All post types where beaver builder is enabled.
+	 *
+	 * @author    WP Beaver World
+	 * @var       array
+	 * @access    private
+	 */
 	private $builder_work;
 
 	function __construct() {
@@ -29,17 +29,17 @@ class BeaverLister {
 	}
 
 	/**
-     * Adding custom columns
-     * Performing search
-     *
-     * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @return  void
-     */
+	 * Adding custom columns
+	 * Performing search
+	 *
+	 * @author 	WP Beaver World
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @return  void
+	 */
 	public function wpbw_do_beaver_lister( $current_screen ) {
-		if( in_array( $current_screen->post_type, $this->builder_work ) && $current_screen->post_type !== "fl-builder-template") {
+		if( in_array( $current_screen->post_type, $this->builder_work ) ) {
 			add_filter( 'manage_'. $current_screen->post_type .'_posts_columns' , array( $this, 'wpbw_bl_custom_posts_columns' ), 99 );
 			add_action( 'manage_'. $current_screen->post_type .'_posts_custom_column' , array( $this, 'wpbw_bl_custom_post_column_data' ), 100, 2 );
 			add_action( 'restrict_manage_posts' , array( $this, 'wpbw_bl_restrict_manage_posts' ), 99, 10 );
@@ -52,12 +52,12 @@ class BeaverLister {
 	 * Add or remove (unset) custom columns to a list of custom post types
 	 *
 	 * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @param 	array 	$columns
-     * @return  array
-     */
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	array 	$columns
+	 * @return  array
+	 */
 	public function wpbw_bl_custom_posts_columns( $columns ) {
 
 		unset(
@@ -77,13 +77,13 @@ class BeaverLister {
 	 * Displaying the data of custom columns
 	 *
 	 * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @param 	string 	$column 	Column slug
-     * @param 	integer $post_id 	Current Post Id
-     * @return  array
-     */
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	string 	$column 	Column slug
+	 * @param 	integer $post_id 	Current Post Id
+	 * @return  array
+	 */
 	public function wpbw_bl_custom_post_column_data( $column, $post_id ){
 
 		switch ( $column ) {
@@ -117,13 +117,13 @@ class BeaverLister {
 	 * Adding "filter by selected module" drop down list
 	 *
 	 * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @param 	sting 	$columns 	The post type slug
-     * @param 	string 	$which 		The location of the extra table nav markup
-     * @return  array
-     */
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	sting 	$columns 	The post type slug
+	 * @param 	string 	$which 		The location of the extra table nav markup
+	 * @return  array
+	 */
 	public function wpbw_bl_restrict_manage_posts( $post_type, $which ) {
 		$cat_modules = FLBuilderModel::get_categorized_modules();
 		if( $cat_modules ) {
@@ -151,12 +151,12 @@ class BeaverLister {
 	 * Adding 'Show Beaver Pages' button at top of wp list tablenav
 	 *
 	 * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @param 	string 	$which 	The location of the extra table nav markup
-     * @return  array
-     */
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	string 	$which 	The location of the extra table nav markup
+	 * @return  array
+	 */
 	public function wpbw_bl_extra_tablenav( $which ) {
 		global $wpdb, $post_type;
     
@@ -169,12 +169,12 @@ class BeaverLister {
 	 * Set up query variables
 	 *
 	 * @author 	WP Beaver World
-     * @since   1.0
-     *
-     * @access  public
-     * @param 	object 	$query 		The query object that parsed the query
-     * @return  void
-     */
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	object 	$query 		The query object that parsed the query
+	 * @return  void
+	 */
 	public function wpbw_bl_request_query( $query ) {
 		
 		global $pagenow, $post_type, $wpdb;
