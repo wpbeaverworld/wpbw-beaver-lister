@@ -8,3 +8,12 @@ Listing the active beaver builder pages and filtering the page builder pages by 
 3. Click on activate link and activate the plugin.
 4. After activating the plugin
 5. Naviagte to edit screen of page builder enabled post type pages at dashboard
+
+# Credit
+
+Author: WP Beaver World
+URL: http://www.wpbeaverworld.com
+
+# Copyright
+
+Copyright (c) 2016 WP Beaver World. All rights reserved.
