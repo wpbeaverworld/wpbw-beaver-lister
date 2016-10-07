@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: beaver-lister\n"
+"POT-Creation-Date: 2016-10-07 10:21+0530\n"
+"PO-Revision-Date: 2016-10-07 10:21+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: C:\\xampp5\\htdocs\\bb\\wp-content\\plugins\\wpbw-"
+"beaver-lister\n"
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/wpbw-beaver-lister.php:29
+msgid "Sorry, you are not allowed to access this page directly."
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:68
+msgid "Builder Enabled?"
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:69
+msgid "Modules Used"
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:70
+msgid "Date"
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:131
+msgid "Beaver Modules"
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:133
+msgid "Beaver Pages by Module"
+msgstr ""
+
+#: C:\xampp5\htdocs\bb\wp-content\plugins\wpbw-beaver-lister/classes/class.beaverlister.php:164
+msgid "Show Beaver Pages"
+msgstr ""
