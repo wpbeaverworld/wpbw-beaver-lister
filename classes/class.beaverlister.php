@@ -78,6 +78,7 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
+	 * @version 1.0.2
 	 *
 	 * @access  public
 	 * @param 	string 	$column 	Column slug
@@ -99,6 +100,22 @@ class BeaverLister {
 	        	if( $data ) {
 	        		$modules_used = array();
 	        		foreach ($data as $object ) {
+
+	        			if( ! empty( $object->template_id ) && get_post_type() !== 'fl-builder-template' ) {
+							$postId = FLBuilderModel::get_node_template_post_id( $object->template_id );
+							$global_tpl_data = get_post_meta( $postId, '_fl_builder_data', true );
+							if( $global_tpl_data ) :
+								foreach ($global_tpl_data as $obj ) {
+									if( $obj->type != 'module' ) {
+										continue;
+									}
+
+									if( ! in_array( $obj->settings->type, $modules_used ) )
+										$modules_used[ $obj->settings->type ] = ucwords( str_replace( '-', ' ', $obj->settings->type ) );
+								}
+							endif;
+						}
+
 	        			if( $object->type != 'module' ) {
 							continue;
 						}
