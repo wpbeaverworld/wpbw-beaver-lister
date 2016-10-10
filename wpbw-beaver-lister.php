@@ -11,7 +11,7 @@
  * Author URI:    http://www.wpbeaverworld.com
  * Support:       http://support.wpbeaverworld.com
  *   
- * Version:       1.0.2
+ * Version:       1.0.3
  *  
  * Text Domain:   beaver-lister
  * Domain Path:   languages  
@@ -29,7 +29,7 @@ if ( !defined( 'ABSPATH' ) ) {
   wp_die( __( "Sorry, you are not allowed to access this page directly." ) );
 }
 
-$bl_version = "1.0.2";
+$bl_version = "1.0.3";
 
 define( 'BL_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BL_URL', plugins_url( '/', __FILE__ ) );

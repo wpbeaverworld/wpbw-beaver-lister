@@ -11,6 +11,7 @@
  * @copyright   Copyright (c) 2016 WP Beaver World.
  *
  * @since       1.0
+ * @version 	1.0.3
  */
 class BeaverLister {
 	/**
@@ -34,6 +35,7 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
+	 * @version 1.0.3
 	 *
 	 * @access  public
 	 * @return  void
@@ -45,6 +47,11 @@ class BeaverLister {
 			add_action( 'restrict_manage_posts' , array( $this, 'wpbw_bl_restrict_manage_posts' ), 99, 10 );
 			add_action( 'manage_posts_extra_tablenav', array( $this, 'wpbw_bl_extra_tablenav' ) );
 			add_filter( 'parse_query' , array( $this, 'wpbw_bl_request_query' ), 999 );
+		}
+
+		if( is_admin() && $current_screen->post_type === "fl-builder-template" ) {
+			add_action( 'admin_footer', array( $this, 'wpbw_bl_add_css' ) );
+			add_filter( 'post_class', array( $this, 'wpbw_bl_add_custom_class' ), 99 );
 		}
 	}
 
@@ -66,9 +73,14 @@ class BeaverLister {
 
 		$new_columns = array(
 			'active_page_builder' 	=> __( 'Builder Enabled?', 'beaver-lister' ),
-			'modules_used' 			=> __( 'Modules Used', 'beaver-lister' ),
-			'date'					=> __( 'Date', 'wordpress' )
 		);
+
+		if( 'fl-builder-template' === get_post_type() ) {
+			$new_columns['is_used'] = __( 'Is Used?', 'wordpress' );	
+		}
+
+		$new_columns['modules_used'] 	= __( 'Modules Used', 'beaver-lister' );
+		$new_columns['date'] 			= __( 'Date', 'wordpress' );
 
 	    return array_merge( $columns, $new_columns );
 	}
@@ -85,7 +97,7 @@ class BeaverLister {
 	 * @param 	integer $post_id 	Current Post Id
 	 * @return  array
 	 */
-	public function wpbw_bl_custom_post_column_data( $column, $post_id ){
+	public function wpbw_bl_custom_post_column_data( $column, $post_id ) {
 
 		switch ( $column ) {
 
@@ -127,7 +139,46 @@ class BeaverLister {
 	        		echo implode(', ', $modules_used );
 	        	}
 	        	break;
+
+	        case "is_used" :
+	        		$posts = FLBuilderModel::get_posts_with_global_node_template( $post_id );
+	        		if ( count( $posts ) > 0 ) {
+	        			echo '&#x2611;';
+	        		}
+	        	break;
 	    }
+	}
+
+	/** 
+	 * Adding CSS
+	 * It will identify the global template row
+	 *
+	 * @author 	WP Beaver World
+	 * @since   1.0.3
+	 *
+	 * @access  public
+	 */
+	public function wpbw_bl_add_css() {
+		echo '<style type="text/css">.global-tpl{ background: #fbd6a1!important;}</style>';
+	}
+
+	/** 
+	 * Adding custom class in wp post list table
+	 *
+	 * @author 	WP Beaver World
+	 * @since   1.0
+	 *
+	 * @access  public
+	 * @param 	array 	$classes 	The post class
+	 * @return  array 	$classes 	The updated post class
+	 */
+	public function wpbw_bl_add_custom_class( $classes ) {
+		global $post;
+		$posts = FLBuilderModel::get_posts_with_global_node_template( $post->ID );
+		if ( count( $posts ) > 0 ) {
+			$classes[] = 'global-tpl';
+		}
+		return $classes;
 	}
 
 	/** 
