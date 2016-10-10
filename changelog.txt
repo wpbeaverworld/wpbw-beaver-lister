@@ -1,3 +1,7 @@
+= 1.0.3 - 10/10/2016 =
+Added - Custom class and identifying the globla template
+Added - Is a global template using on the site?
+
 = 1.0.2 - 08/10/2016 =
 Added - Showing global row's modules
 
