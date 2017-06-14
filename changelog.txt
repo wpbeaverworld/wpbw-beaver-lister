@@ -1,3 +1,6 @@
+= 1.0.4 - 14/06/2016 =
+Added - Organized the modules based on category list
+
 = 1.0.3 - 10/10/2016 =
 Added - Custom class and identifying the globla template
 Added - Is a global template using on the site?
