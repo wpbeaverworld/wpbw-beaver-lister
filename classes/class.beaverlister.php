@@ -22,6 +22,7 @@ class BeaverLister {
 	 * @access    private
 	 */
 	private $builder_work;
+	private $cat_modules = array();
 
 	function __construct() {
 		$this->builder_work = FLBuilderModel::get_post_types();
@@ -35,12 +36,14 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
-	 * @version 1.0.3
+	 * @version 1.0.4
 	 *
 	 * @access  public
 	 * @return  void
 	 */
 	public function wpbw_do_beaver_lister( $current_screen ) {
+		$this->cat_modules = FLBuilderModel::get_categorized_modules();
+
 		if( in_array( $current_screen->post_type, $this->builder_work ) ) {
 			add_filter( 'manage_'. $current_screen->post_type .'_posts_columns' , array( $this, 'wpbw_bl_custom_posts_columns' ), 99 );
 			add_action( 'manage_'. $current_screen->post_type .'_posts_custom_column' , array( $this, 'wpbw_bl_custom_post_column_data' ), 100, 2 );
@@ -49,7 +52,7 @@ class BeaverLister {
 			add_filter( 'parse_query' , array( $this, 'wpbw_bl_request_query' ), 999 );
 		}
 
-		if( is_admin() && $current_screen->post_type === "fl-builder-template" ) {
+		if( is_admin() && ( $current_screen->post_type === "fl-builder-template" || $current_screen->post_type === "fl-theme-layout" ) ) {
 			add_action( 'admin_footer', array( $this, 'wpbw_bl_add_css' ) );
 			add_filter( 'post_class', array( $this, 'wpbw_bl_add_custom_class' ), 99 );
 		}
@@ -75,7 +78,7 @@ class BeaverLister {
 			'active_page_builder' 	=> __( 'Builder Enabled?', 'beaver-lister' ),
 		);
 
-		if( 'fl-builder-template' === get_post_type() ) {
+		if( 'fl-builder-template' === get_post_type() || 'fl-theme-layout' === get_post_type() ) {
 			$new_columns['is_used'] = __( 'Is Used?', 'wordpress' );	
 		}
 
@@ -110,7 +113,7 @@ class BeaverLister {
 	        case "modules_used" :
 	        	$data = get_post_meta( $post_id, '_fl_builder_data', true );
 	        	if( $data ) {
-	        		$modules_used = array();
+	        		$modules_used = $usedModules = array();
 	        		foreach ($data as $object ) {
 
 	        			if( ! empty( $object->template_id ) && get_post_type() !== 'fl-builder-template' ) {
@@ -122,8 +125,25 @@ class BeaverLister {
 										continue;
 									}
 
-									if( ! in_array( $obj->settings->type, $modules_used ) )
+									if( ! in_array( $obj->settings->type, $modules_used ) ) 
+									{
+										$cat_name = '';
+										foreach ($this->cat_modules as $key => $value ) {
+											foreach ($value as $key2 => $mobj) {
+												if( $mobj->slug == $object->settings->type )
+												{
+													$cat_name = $mobj->category;
+													$usedModules[$cat_name][] = ucwords( str_replace( '-', ' ', $obj->settings->type ) );
+													break;
+												}
+											}
+
+											if( $cat_name != '' )
+												break;
+										}
+
 										$modules_used[ $obj->settings->type ] = ucwords( str_replace( '-', ' ', $obj->settings->type ) );
+									}
 								}
 							endif;
 						}
@@ -132,11 +152,30 @@ class BeaverLister {
 							continue;
 						}
 
-						if( ! in_array( $object->settings->type, $modules_used ) )
+						if( ! in_array( $object->settings->type, $modules_used ) ) 
+						{
+							$cat_name = '';
+							foreach ($this->cat_modules as $key => $value ) {
+								foreach ($value as $key2 => $mobj) {
+									if( $mobj->slug == $object->settings->type )
+									{
+										$cat_name = $mobj->category;
+										$usedModules[$cat_name][] = ucwords( str_replace( '-', ' ', $object->settings->type ) );
+										break;
+									}
+								}
+
+								if( $cat_name != '' )
+									break;
+							}
+
 							$modules_used[ $object->settings->type ] = ucwords( str_replace( '-', ' ', $object->settings->type ) );
+						}
 	        		}
 
-	        		echo implode(', ', $modules_used );
+	        		foreach ($usedModules as $key => $modules) {
+	        			echo '<strong>' . $key . ':</strong><br/>' . implode(', ', $modules ) . '<br/>';
+	        		}
 	        	}
 	        	break;
 
@@ -193,14 +232,14 @@ class BeaverLister {
 	 * @return  array
 	 */
 	public function wpbw_bl_restrict_manage_posts( $post_type, $which ) {
-		$cat_modules = FLBuilderModel::get_categorized_modules();
-		if( $cat_modules ) {
+		//$cat_modules = FLBuilderModel::get_categorized_modules();
+		if( $this->cat_modules ) {
 		?>
 			<label for="filter-by-bb-module" class="screen-reader-text"><?php _e( 'Beaver Modules' ); ?></label>
 			<select name="meta_bb_module" id="filter-by-bb-module">
 				<option value=""><?php _e( 'Beaver Pages by Module', 'fl-automator' ); ?></option>
 				<?php
-					foreach( $cat_modules as $key => $modules ) {
+					foreach( $this->cat_modules as $key => $modules ) {
 						printf( '<optgroup label="%s">', $key );
 						foreach( $modules as $module ) {	
 							$sel = ( ! empty( $_GET['meta_bb_module'] ) && $_GET['meta_bb_module'] == $module->slug ) ? ' selected' : '' ;
