@@ -11,7 +11,7 @@
  * @copyright   Copyright (c) 2016 WP Beaver World.
  *
  * @since       1.0
- * @version 	1.0.3
+ * @version 	1.0.4
  */
 class BeaverLister {
 	/**
@@ -83,7 +83,7 @@ class BeaverLister {
 		}
 
 		$new_columns['modules_used'] 	= __( 'Modules Used', 'beaver-lister' );
-		$new_columns['date'] 			= __( 'Date', 'wordpress' );
+		$new_columns['date'] 		= __( 'Date', 'wordpress' );
 
 	    return array_merge( $columns, $new_columns );
 	}
@@ -174,7 +174,7 @@ class BeaverLister {
 	        		}
 
 	        		foreach ($usedModules as $key => $modules) {
-	        			echo '<strong>' . $key . ':</strong><br/>' . implode(', ', $modules ) . '<br/>';
+	        			echo '<strong>' . $key . ':</strong><br/>' . implode(', ', array_unique( $modules ) ) . '<br/>';
 	        		}
 	        	}
 	        	break;
