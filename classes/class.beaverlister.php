@@ -11,7 +11,7 @@
  * @copyright   Copyright (c) 2016 WP Beaver World.
  *
  * @since       1.0
- * @version 	1.0.4
+ * @version 	1.0.5
  */
 class BeaverLister {
 	/**
@@ -36,7 +36,7 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
-	 * @version 1.0.4
+	 * @version 1.0.5
 	 *
 	 * @access  public
 	 * @return  void
@@ -293,11 +293,17 @@ class BeaverLister {
 			if ( ! empty( $_GET['meta_bb_module'] ) ) {
 				
 				$bb_module = esc_attr( $_GET['meta_bb_module'] );
-				$results = $wpdb->get_results( "SELECT $wpdb->postmeta.post_id FROM $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->postmeta.post_id WHERE $wpdb->posts.post_type != 'revision' AND $wpdb->postmeta.meta_key = '_fl_builder_data' and ( $wpdb->postmeta.meta_value LIKE '%{$bb_module}%' )", OBJECT );
+				$results = $wpdb->get_results( "SELECT $wpdb->postmeta.post_id, $wpdb->postmeta.meta_value FROM $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->posts.ID = $wpdb->postmeta.post_id WHERE $wpdb->posts.post_type != 'revision' AND $wpdb->postmeta.meta_key = '_fl_builder_data' and ( $wpdb->postmeta.meta_value LIKE '%{$bb_module}%' )", OBJECT );
 				
 				if( $results ) {
 					foreach ($results as $value) {
-						$qv['post__in'][] = $value->post_id;
+						$data = maybe_unserialize($value->meta_value);
+						foreach ($data as $key => $mobj) {
+							if( $mobj->type === "module" && $mobj->settings->type === $bb_module )
+							{
+								$qv['post__in'][] = $value->post_id;
+							}
+						}
 					}
 				} else {
 					$qv['post__in'][] = -999;
