@@ -11,7 +11,7 @@ Listing the active beaver builder pages and filtering the page builder pages by 
 # Credit
 
 * Author: WP Beaver World
-* URL: http://www.wpbeaverworld.com
+* URL: https://www.wpbeaverworld.com
 * Twitter: https://www.twitter.com/wpbeaverworld
 
 # Copyright
