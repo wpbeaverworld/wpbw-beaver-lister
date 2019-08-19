@@ -11,7 +11,7 @@
  * @copyright   Copyright (c) 2016 WP Beaver World.
  *
  * @since       1.0
- * @version 	1.0.5
+ * @version 	1.0.7
  */
 class BeaverLister {
 	/**
@@ -36,7 +36,7 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
-	 * @version 1.0.5
+	 * @version 1.0.7
 	 *
 	 * @access  public
 	 * @return  void
@@ -93,7 +93,7 @@ class BeaverLister {
 	 *
 	 * @author 	WP Beaver World
 	 * @since   1.0
-	 * @version 1.0.2
+	 * @version 1.0.7
 	 *
 	 * @access  public
 	 * @param 	string 	$column 	Column slug
@@ -130,10 +130,11 @@ class BeaverLister {
 										$cat_name = '';
 										foreach ($this->cat_modules as $key => $value ) {
 											foreach ($value as $key2 => $mobj) {
-												if( $mobj->slug == $object->settings->type )
-												{
-													$cat_name = $mobj->category;
-													$usedModules[$cat_name][] = ucwords( str_replace( '-', ' ', $obj->settings->type ) );
+												if( ! empty( $mobj->slug ) && $mobj->slug == $object->settings->type )
+												{	
+													$modDetails = FLBuilderModel::$modules[$obj->settings->type];
+													$cat_name = empty( $modDetails->group ) ? $modDetails->category : $modDetails->group;
+													$usedModules[$cat_name][] = $modDetails->name;
 													break;
 												}
 											}
@@ -148,26 +149,16 @@ class BeaverLister {
 							endif;
 						}
 
-	        			if( $object->type != 'module' ) {
+	        				if( $object->type != 'module' ) {
 							continue;
 						}
 
 						if( ! in_array( $object->settings->type, $modules_used ) ) 
 						{
 							$cat_name = '';
-							foreach ($this->cat_modules as $key => $value ) {
-								foreach ($value as $key2 => $mobj) {
-									if( $mobj->slug == $object->settings->type )
-									{
-										$cat_name = $mobj->category;
-										$usedModules[$cat_name][] = ucwords( str_replace( '-', ' ', $object->settings->type ) );
-										break;
-									}
-								}
-
-								if( $cat_name != '' )
-									break;
-							}
+							$modDetails = FLBuilderModel::$modules[$object->settings->type];
+                                        		$cat_name = empty( $modDetails->group ) ? $modDetails->category : $modDetails->group;
+							$usedModules[$cat_name][] = $modDetails->name;										
 
 							$modules_used[ $object->settings->type ] = ucwords( str_replace( '-', ' ', $object->settings->type ) );
 						}
